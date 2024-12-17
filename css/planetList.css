@@ -1,0 +1,32 @@
+.underlineActive2 {
+    width: 29%;
+    border: 1px solid #FF17CB;
+    margin-left: 38%;
+}
+
+
+/*   */
+.planetTitle{
+    font-weight: 400;
+    font-size: 8em;
+    text-align: center;
+}
+
+
+/*   */
+.planetContainer{
+    display: flex;
+    justify-content: center;
+    margin-top: 7.2%;
+}
+
+.planetContainer img{
+    width: 300px;
+    height: 300px;
+}
+
+
+.planetContainer .centerImage{
+    width: 1050px;
+    height: 400px;
+}
