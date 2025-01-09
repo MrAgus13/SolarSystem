@@ -16,7 +16,6 @@ scene.add(light);
 // Cargar las texturas
 const textureLoader = new THREE.TextureLoader();
 
-
 // Crear un sistema de partículas para las estrellas
 const numStars = 4000;  // Número de estrellas a crear
 
@@ -50,9 +49,6 @@ for (let i = 0; i < numStars; i++) {
 }
 
 // Variables para controlar el parpadeo
-
-// Asignar un intervalo de parpadeo diferente a cada estrella
-
 const blinkSpeed = 2;  // Velocidad de parpadeo (más bajo es más lento)
 const blinkDuration = 5000;  // Duración total para parpadear de apagado a encendido (en ms)
 
@@ -60,13 +56,12 @@ const blinkDuration = 5000;  // Duración total para parpadear de apagado a ence
 function animateStars() {
     stars.forEach((star) => {
         // Crear un parpadeo suave usando una interpolación en el tiempo
-        const time = Date.now() * 0.002 // Tiempo en función de la velocidad de parpadeo
+        const time = Date.now() * 0.002; // Tiempo en función de la velocidad de parpadeo
         const opacity = Math.sin(time * blinkSpeed) * 0.5 + 0.5; // Cambia la opacidad de 0 a 1 de forma suave
 
         // Asignar la opacidad calculada
         star.material.opacity = opacity;
     });
-    
 
     // Llamar a la función de animación en el siguiente frame
     requestAnimationFrame(animateStars);
@@ -76,16 +71,18 @@ function animateStars() {
 // Iniciar la animación de parpadeo
 animateStars();
 
+
+
 // Crear el modelo de la Tierra
 const earthGeometry = new THREE.SphereGeometry(1.4, 32, 32);
 const earthMaterial = new THREE.MeshStandardMaterial({
     map: textureLoader.load('../img/2k_earth_daymap.jpg'),
     bumpMap: textureLoader.load('../img/2k_earth_daymap.jpg'),
     bumpScale: 0.03,  // Escala de relieve
-
 });
 const earth = new THREE.Mesh(earthGeometry, earthMaterial);
 earth.position.set(0, -1.8, 0); // Posición X, Y, Z (puedes ajustarlas según lo que necesites)
+earth.name = "earth";  // Asignamos un nombre
 scene.add(earth);
 
 // Cargar la textura de las nubes
@@ -102,8 +99,6 @@ const cloudMaterial = new THREE.MeshBasicMaterial({
 const clouds = new THREE.Mesh(cloudGeometry, cloudMaterial);
 clouds.position.set(0, -1.8, 0); // Posición X, Y, Z (puedes ajustarlas según lo que necesites)
 scene.add(clouds);
-
-
 
 // Crear la atmósfera
 const atmosphereGeometry = new THREE.SphereGeometry(1.46, 32, 32); // Esfera ligeramente más grande
@@ -135,21 +130,42 @@ const atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
 atmosphere.position.set(0, -1.8, 0); // Posición X, Y, Z (puedes ajustarlas según lo que necesites)
 scene.add(atmosphere);
 
+
+// Cambiar la posición de Mercurio
+const mercuryMaterial = new THREE.MeshStandardMaterial({
+    map: textureLoader.load('../img/2k_mercury.jpg'),
+});
+const mercury = new THREE.Mesh(new THREE.SphereGeometry(0.4, 32, 32), mercuryMaterial);
+mercury.position.set(-9, 0, 0); // Venus en X = -4, Y = 1, Z = 0
+mercury.name = "mercury";  // Asignamos un nombre
+scene.add(mercury);
+
 // Cambiar la posición de Venus
 const venusMaterial = new THREE.MeshStandardMaterial({
     map: textureLoader.load('../img/2k_venus_surface.jpg'),
 });
 const venus = new THREE.Mesh(new THREE.SphereGeometry(0.4, 32, 32), venusMaterial);
 venus.position.set(-4.5, 0, 0); // Venus en X = -4, Y = 1, Z = 0
+venus.name = "venus";  // Asignamos un nombre
 scene.add(venus);
 
 // Cambiar la posición de Marte
 const marsMaterial = new THREE.MeshStandardMaterial({
     map: textureLoader.load('../img/2k_mars.jpg'),
 });
-const mars = new THREE.Mesh(new THREE.SphereGeometry(0.6, 32, 32), marsMaterial);
+const mars = new THREE.Mesh(new THREE.SphereGeometry(0.4, 32, 32), marsMaterial);
 mars.position.set(4.5, 0, 0); // Marte en X = 4, Y = -1, Z = 0
+mars.name = "mars";  // Asignamos un nombre
 scene.add(mars);
+
+// Jupiter
+const jupiterMaterial = new THREE.MeshStandardMaterial({
+    map: textureLoader.load('../img/2k_jupiter.jpg'),
+});
+const jupiter = new THREE.Mesh(new THREE.SphereGeometry(0.6, 32, 32), jupiterMaterial);
+jupiter.position.set(9, 0, 0); // Marte en X = 4, Y = -1, Z = 0
+jupiter.name = "jupiter";  // Asignamos un nombre
+scene.add(jupiter);
 
 // Ajustar la posición de la cámara
 camera.position.z = 6;  // Cambiar la posición de la cámara según sea necesario
@@ -157,11 +173,13 @@ camera.position.z = 6;  // Cambiar la posición de la cámara según sea necesar
 // Animar la rotación de la Tierra
 function animate() {
     requestAnimationFrame(animate);
+    mercury.rotation.y += 0.002; 
     earth.rotation.y += 0.001; // Velocidad de rotación de la Tierra
     atmosphere.rotation.y += 0.005; // Rotación de la atmósfera
     clouds.rotation.y += 0.0007;
-    venus.rotation.y += 0.003; // Rotación de Venus
-    mars.rotation.y += 0.003;  // Rotación de Marte
+    venus.rotation.y += 0.0015; // Rotación de Venus
+    mars.rotation.y += 0.002;  // Rotación de Marte
+    jupiter.rotation.y += 0.0005; // Rotación de Venus
     renderer.render(scene, camera);
 }
 
@@ -173,3 +191,126 @@ window.addEventListener('resize', () => {
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
+
+const title = document.getElementById("title");
+const leftPlanetTitle = document.getElementById("leftPlanet");
+const rightPlanetTitle = document.getElementById("rightPlanet");
+
+// Variables para el raycaster y el mouse
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+// Función para detectar el clic en los planetas
+function onMouseClick(event) {
+    // Calculamos la posición del mouse en el espacio de la pantalla (-1 a 1)
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+    // Actualizamos el raycaster con la cámara y la posición del mouse
+    raycaster.ray.origin.copy(camera.position); // El origen del rayo es la posición de la cámara
+    raycaster.ray.direction.set(mouse.x, mouse.y, 0.5).unproject(camera).sub(raycaster.ray.origin).normalize(); // Dirección del rayo
+
+    // Usamos intersectObjects para encontrar las intersecciones
+    const intersects = raycaster.intersectObjects([mercury,earth, venus, mars,jupiter]);  // Revisamos intersecciones con los tres planetas
+
+    // Verificamos si se ha producido alguna intersección
+    if (intersects.length > 0) {
+        const intersectedObject = intersects[0].object;
+        console.log("Clic en el planeta: ", intersectedObject.name);
+
+        // Lógica para mover y cambiar el tamaño de los planetas
+        switch (intersectedObject.name) {
+            case 'earth':
+                leftPlanetTitle.textContent = "Venus"
+                title.innerHTML = "PLANET <br> EARTH"
+                rightPlanetTitle.textContent = "Mars"       
+                // La Tierra se pone al tamaño base, los demás planetas se reducen
+                animatePlanet(mercury, new THREE.Vector3(-9, 0, 0), 1);  
+                animatePlanet(venus, new THREE.Vector3(-4.5, 0, 0), 1);  
+
+                animatePlanet(earth, new THREE.Vector3(0, -1.8, 0), 1);  
+                animatePlanet(atmosphere, new THREE.Vector3(0, -1.8, 0), 1); 
+                animatePlanet(clouds, new THREE.Vector3(0, -1.8, 0), 1); 
+
+                animatePlanet(mars, new THREE.Vector3(4.5, 0, 0), 1);  
+                animatePlanet(jupiter, new THREE.Vector3(9, 0, 0), 1); 
+                break;
+            case 'venus':
+                // Add mercury to the scene
+                leftPlanetTitle.textContent = "Mercury"
+                title.innerHTML = "PLANET <br> VENUS"
+                rightPlanetTitle.textContent = "Earth"  
+                // Venus al tamaño base, los demás planetas más pequeños
+                animatePlanet(mercury, new THREE.Vector3(-4.5, 0, 0), 1); 
+
+                animatePlanet(venus, new THREE.Vector3(0, -1.8, 0), 3); 
+
+                animatePlanet(earth, new THREE.Vector3(4.5, 0, 0), 0.3); 
+                animatePlanet(atmosphere, new THREE.Vector3(4.5, 0, 0), 0.3); 
+                animatePlanet(clouds, new THREE.Vector3(4.5, 0, 0), 0.3); 
+
+                animatePlanet(mars, new THREE.Vector3(9, 0, 0), 1);  
+                break;
+            case 'mars':
+                leftPlanetTitle.textContent = "Earth"
+                title.innerHTML = "PLANET <br> MARS"
+                rightPlanetTitle.textContent = "Jupiter"  
+                // Marte al tamaño base, los demás planetas más pequeños
+                animatePlanet(venus, new THREE.Vector3(-9, 0, 0), 1);  
+
+                animatePlanet(earth, new THREE.Vector3(-4.5, 0, 0), 0.3);  
+                animatePlanet(atmosphere, new THREE.Vector3(-4.5, 0, 0), 0.3); 
+                animatePlanet(clouds, new THREE.Vector3(-4.5, 0, 0), 0.3); 
+
+                animatePlanet(mars, new THREE.Vector3(0, -1.8, 0), 2.5); 
+                
+                animatePlanet(jupiter, new THREE.Vector3(4.5, 0, 0), 1); 
+                break;
+            case 'jupiter':
+                leftPlanetTitle.textContent = "Mars"
+                title.innerHTML = "PLANET <br> JUPITER"
+                rightPlanetTitle.textContent = "Saturn"  
+                // Marte al tamaño base, los demás planetas más pequeños
+                animatePlanet(earth, new THREE.Vector3(-9, 0, 0), 0.3);  
+                animatePlanet(atmosphere, new THREE.Vector3(-9, 0, 0), 0.3); 
+                animatePlanet(clouds, new THREE.Vector3(-9, 0, 0), 0.3); 
+
+                animatePlanet(mars, new THREE.Vector3(-4.5, 0, 0), 1); 
+                
+                animatePlanet(jupiter, new THREE.Vector3(0, -1.8, 0), 4.5); 
+                break;
+    }
+    } else {
+        console.log("No se ha hecho clic en ningún planeta.");
+    }
+}
+
+// Función para animar el movimiento y cambio de escala de un planeta
+function animatePlanet(planet, newPosition, targetScale) {
+    const duration = 1; // Duración en segundos
+    const startPosition = planet.position.clone();
+    const targetPosition = newPosition;
+    const startScale = planet.scale.clone();
+    const targetScaleVector = new THREE.Vector3(targetScale, targetScale, targetScale);  // Tamaño objetivo
+
+    let elapsedTime = 0;
+
+    function updatePlanetPosition() {
+        elapsedTime += 0.016;  // Asumiendo 60fps
+        const t = Math.min(elapsedTime / duration, 1);
+
+        // Interpolamos posición y escala
+        planet.position.lerpVectors(startPosition, targetPosition, t);
+        planet.scale.lerpVectors(startScale, targetScaleVector, t);
+
+        if (t < 1) {
+            requestAnimationFrame(updatePlanetPosition);
+        }
+    }
+
+    updatePlanetPosition();
+}
+
+// Añadir un escuchador de eventos de clic
+window.addEventListener('click', onMouseClick, false);
