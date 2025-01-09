@@ -8,7 +8,6 @@ const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x000000, 0); // Fondo transparente
 container.appendChild(renderer.domElement);
-
 // Luz
 const light = new THREE.PointLight(0xffffff, 1, 100);
 light.position.set(10, 10, 10);
@@ -95,6 +94,17 @@ const sunMaterial = new THREE.MeshBasicMaterial({ map: textures.sun });
 const sun = new THREE.Mesh(sunGeometry, sunMaterial);
 scene.add(sun);
 
+// Añadir luz puntual al Sol
+const sunLight = new THREE.PointLight(0xffffff, 1.5, 100, 2); 
+sunLight.position.set(sun.position.x, sun.position.y, sun.position.z); 
+scene.add(sunLight);
+
+
+function updateSunLight() {
+    sunLight.position.copy(sun.position); 
+}
+
+
 // Crear planetas con diferentes texturas
 const planets = [];
 const planetData = [
@@ -110,7 +120,12 @@ const planetData = [
 
 planetData.forEach(data => {
     const planetGeometry = new THREE.SphereGeometry(data.size, 32, 32);
-    const planetMaterial = new THREE.MeshBasicMaterial({ map: data.texture });
+
+    // Cambiar a MeshStandardMaterial para que los planetas reaccionen a la luz
+    const planetMaterial = new THREE.MeshStandardMaterial({
+        map: data.texture,  // Asigna la textura
+    });
+
     const planet = new THREE.Mesh(planetGeometry, planetMaterial);
     planet.position.x = data.distance;
     planet.rotationSpeed = data.rotationSpeed;
@@ -137,11 +152,11 @@ scene.rotation.x = inclination;
 
 
 // Crear líneas de órbita para los planetas
-const orbitMaterial = new THREE.LineBasicMaterial({ color: 0x888888 }); // Color gris para las órbitas
+const orbitMaterial = new THREE.LineBasicMaterial({ color: 0x999999 }); // Color gris para las órbitas
 
 planetData.forEach((data) => {
     // Crear geometría de anillo para representar la órbita
-    const orbitGeometry = new THREE.RingGeometry(data.distance - 0.1, data.distance + 0.1, 5000); // Aumenta el número de segmentos
+    const orbitGeometry = new THREE.RingGeometry(data.distance - 0.1, data.distance + 0.1, 1000); // Aumenta el número de segmentos
     
     // Crear la línea de órbita usando LineLoop (que conecta los puntos formando un círculo)
     const orbit = new THREE.LineLoop(orbitGeometry, orbitMaterial);
@@ -173,22 +188,23 @@ function animate() {
     // Rotar el sol
     sun.rotation.y += 0.005;
 
+    // Actualizar las posiciones y rotaciones de los planetas
     planets.forEach((planet, index) => {
         planet.rotation.y += planet.rotationSpeed;
-
-        // Calcular la velocidad angular de cada planeta en función de su distancia al Sol
         const orbitalSpeed = getOrbitalSpeed(planetData[index].distance);
-
-        // Actualizar las posiciones de los planetas
         planet.position.x = Math.cos(Date.now() * orbitalSpeed) * planetData[index].distance;
         planet.position.z = Math.sin(Date.now() * orbitalSpeed) * planetData[index].distance;
     });
+
+    // Actualizar la posición de la luz del Sol
+    updateSunLight();
 
     controls.update();  // Necesario para la amortiguación
 
     // Renderizar la escena
     renderer.render(scene, camera);
 }
+
 
 // Iniciar la animación
 animate();
