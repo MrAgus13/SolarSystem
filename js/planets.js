@@ -13,6 +13,10 @@ const light = new THREE.PointLight(0xffffff, 1, 100);
 light.position.set(10, 10, 10);
 scene.add(light);
 
+const specificLight = new THREE.PointLight(0xffffff, 1, 100); // Luz cálida con intensidad 1 y alcance 10
+specificLight.position.set(3, 0, 0); // Posicionar la luz en x = 4.5
+scene.add(specificLight);
+
 // Cargar las texturas
 const textureLoader = new THREE.TextureLoader();
 
@@ -85,6 +89,18 @@ earth.position.set(0, -1.8, 0); // Posición X, Y, Z (puedes ajustarlas según l
 earth.name = "earth";  // Asignamos un nombre
 scene.add(earth);
 
+// Crear el modelo de la Luna
+const moonGeometry = new THREE.SphereGeometry(0.2, 32, 32);
+const moonMaterial = new THREE.MeshStandardMaterial({
+    map: textureLoader.load('../img/2k_moon.jpg'),
+    bumpMap: textureLoader.load('../img/2k_moon.jpg'),
+    bumpScale: 0.03,
+});
+const moon = new THREE.Mesh(moonGeometry, moonMaterial);
+moon.position.set(1.8, -1, 0); // Posición X, Y, Z (puedes ajustarlas según lo que necesites)
+moon.name = "moon";  // Asignamos un nombre
+scene.add(moon);
+
 // Cargar la textura de las nubes
 const cloudTexture = textureLoader.load('../img/2k_earth_clouds.jpg'); // Asegúrate de tener una textura de nubes
 
@@ -134,6 +150,8 @@ scene.add(atmosphere);
 // Cambiar la posición de Mercurio
 const mercuryMaterial = new THREE.MeshStandardMaterial({
     map: textureLoader.load('../img/2k_mercury.jpg'),
+    bumpMap: textureLoader.load('../img/2k_mercury.jpg'),
+    bumpScale: 0.03,
 });
 const mercury = new THREE.Mesh(new THREE.SphereGeometry(0.4, 32, 32), mercuryMaterial);
 mercury.position.set(-9, 0, 0); // Venus en X = -4, Y = 1, Z = 0
@@ -143,6 +161,8 @@ scene.add(mercury);
 // Cambiar la posición de Venus
 const venusMaterial = new THREE.MeshStandardMaterial({
     map: textureLoader.load('../img/2k_venus_surface.jpg'),
+    bumpMap: textureLoader.load('../img/2k_venus_surface.jpg'),
+    bumpScale: 0.03,
 });
 const venus = new THREE.Mesh(new THREE.SphereGeometry(0.4, 32, 32), venusMaterial);
 venus.position.set(-4.5, 0, 0); // Venus en X = -4, Y = 1, Z = 0
@@ -152,6 +172,8 @@ scene.add(venus);
 // Cambiar la posición de Marte
 const marsMaterial = new THREE.MeshStandardMaterial({
     map: textureLoader.load('../img/2k_mars.jpg'),
+    bumpMap: textureLoader.load('../img/2k_mars.jpg'),
+    bumpScale: 0.03,
 });
 const mars = new THREE.Mesh(new THREE.SphereGeometry(0.4, 32, 32), marsMaterial);
 mars.position.set(4.5, 0, 0); // Marte en X = 4, Y = -1, Z = 0
@@ -161,25 +183,102 @@ scene.add(mars);
 // Jupiter
 const jupiterMaterial = new THREE.MeshStandardMaterial({
     map: textureLoader.load('../img/2k_jupiter.jpg'),
+    bumpMap: textureLoader.load('../img/2k_jupiter.jpg'),
+    bumpScale: 0.03,
 });
 const jupiter = new THREE.Mesh(new THREE.SphereGeometry(0.6, 32, 32), jupiterMaterial);
 jupiter.position.set(9, 0, 0); // Marte en X = 4, Y = -1, Z = 0
 jupiter.name = "jupiter";  // Asignamos un nombre
 scene.add(jupiter);
 
+// Saturn
+const saturnMaterial = new THREE.MeshStandardMaterial({
+    map: textureLoader.load('../img/2k_saturn.jpg'),
+    bumpMap: textureLoader.load('../img/2k_saturn.jpg'),
+    bumpScale: 0.03,
+});
+const saturn = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 32), saturnMaterial);
+saturn.position.set(9, 0, 0); // Marte en X = 4, Y = -1, Z = 0
+saturn.name = "saturn";  // Asignamos un nombre
+scene.add(saturn);
+
+const saturnRingsMaterial = new THREE.MeshStandardMaterial({
+    map: textureLoader.load('../img/saturnmapthumb.jpg'),
+    bumpMap: textureLoader.load('../img/saturnmapthumb.jpg'),
+    bumpScale: 0.03,
+});
+const saturnRings = new THREE.Mesh(
+    new THREE.TorusGeometry(0.6, 0.025, 32, 120), // Radio interior, grosor, segmentos radiales y circulares
+    saturnRingsMaterial
+);
+saturnRings.position.set(9, 0, 0);
+saturnRings.rotation.x = Math.PI / 2.75;  // Rotación de 90 grados sobre el eje X
+saturnRings.name = "saturnRings";  // Asignamos un nombre
+scene.add(saturnRings);
+
+
+// Uranus
+const uranusMaterial = new THREE.MeshStandardMaterial({
+    map: textureLoader.load('../img/2k_uranus.jpg'),
+    bumpMap: textureLoader.load('../img/2k_uranus.jpg'),
+    bumpScale: 0.03,
+});
+const uranus = new THREE.Mesh(new THREE.SphereGeometry(0.4, 32, 32), uranusMaterial);
+uranus.position.set(9, 0, 0); // Marte en X = 4, Y = -1, Z = 0
+uranus.name = "uranus";  // Asignamos un nombre
+scene.add(uranus);
+
+// Neptune
+const neptuneMaterial = new THREE.MeshStandardMaterial({
+    map: textureLoader.load('../img/2k_neptune.jpg'),
+    bumpMap: textureLoader.load('../img/2k_neptune.jpg'),
+    bumpScale: 0.03,
+});
+const neptune = new THREE.Mesh(new THREE.SphereGeometry(0.4, 32, 32), neptuneMaterial);
+neptune.position.set(9, 0, 0); // Marte en X = 4, Y = -1, Z = 0
+neptune.name = "neptune";  // Asignamos un nombre
+scene.add(neptune);
+
 // Ajustar la posición de la cámara
 camera.position.z = 6;  // Cambiar la posición de la cámara según sea necesario
-
+let angle = 0; 
 // Animar la rotación de la Tierra
 function animate() {
     requestAnimationFrame(animate);
     mercury.rotation.y += 0.002; 
+    moon.rotation.y += 0.002;
+    moon.rotation.x += 0.002;
     earth.rotation.y += 0.001; // Velocidad de rotación de la Tierra
     atmosphere.rotation.y += 0.005; // Rotación de la atmósfera
     clouds.rotation.y += 0.0007;
     venus.rotation.y += 0.0015; // Rotación de Venus
     mars.rotation.y += 0.002;  // Rotación de Marte
-    jupiter.rotation.y += 0.0005; // Rotación de Venus
+    jupiter.rotation.y += 0.0005;
+    saturn.rotation.y += 0.0005;
+    saturnRings.rotation.y += 0.0001;
+    uranus.rotation.y += 0.0004;
+    neptune.rotation.y += 0.0002;
+
+    angle += 0.03; // Controlar la velocidad de la órbita
+
+    // Hacer que la Luna orbite alrededor de la Tierra sin mover la Tierra
+    const earthX = earth.position.x;
+    const earthZ = earth.position.z;
+    
+    // El radio de la Tierra es obtenido de la geometría de la esfera
+    const earthRadius = earth.geometry.parameters.radius;
+    
+    // La Luna orbita a una distancia de 2 unidades del centro de la Tierra, pero con el radio de la Tierra añadido
+    const orbitRadius = earthRadius + 0.2;  
+
+    console.log(orbitRadius);
+    
+    // Calculamos la posición de la Luna en función del ángulo de la órbita
+    moon.position.x = earthX + orbitRadius * Math.cos(angle);  
+    moon.position.z = earthZ + orbitRadius * Math.sin(angle);
+
+    // Hacer que la Luna gire sobre su propio eje
+
     renderer.render(scene, camera);
 }
 
@@ -212,7 +311,7 @@ function onMouseClick(event) {
     raycaster.ray.direction.set(mouse.x, mouse.y, 0.5).unproject(camera).sub(raycaster.ray.origin).normalize(); // Dirección del rayo
 
     // Usamos intersectObjects para encontrar las intersecciones
-    const intersects = raycaster.intersectObjects([mercury,earth, venus, mars,jupiter]);  // Revisamos intersecciones con los tres planetas
+    const intersects = raycaster.intersectObjects([mercury,earth, venus, mars,jupiter,saturn,uranus,neptune]);  // Revisamos intersecciones con los tres planetas
 
     // Verificamos si se ha producido alguna intersección
     if (intersects.length > 0) {
@@ -221,6 +320,41 @@ function onMouseClick(event) {
 
         // Lógica para mover y cambiar el tamaño de los planetas
         switch (intersectedObject.name) {
+            case 'mercury':
+                leftPlanetTitle.textContent = "Neptune"
+                title.innerHTML = "PLANET <br> MERCURY"
+                rightPlanetTitle.textContent = "Venus"  
+                // Venus al tamaño base, los demás planetas más pequeños
+                animatePlanet(uranus, new THREE.Vector3(-9, 0, 0), 1); 
+                animatePlanet(neptune, new THREE.Vector3(-4.5, 0, 0), 1); 
+                
+                animatePlanet(mercury, new THREE.Vector3(0, -1.8, 0), 2.5); 
+                
+                animatePlanet(venus, new THREE.Vector3(4.5, 0, 0), 1);  
+                
+                animatePlanet(earth, new THREE.Vector3(9, 0, 0), 0.3); 
+                animatePlanet(atmosphere, new THREE.Vector3(9, 0, 0), 0.3); 
+                animatePlanet(clouds, new THREE.Vector3(9, 0, 0), 0.3); 
+                animatePlanet(moon, new THREE.Vector3(9, 0, 0), 0.3); 
+                break;
+            case 'venus':
+                // Add mercury to the scene
+                leftPlanetTitle.textContent = "Mercury"
+                title.innerHTML = "PLANET <br> VENUS"
+                rightPlanetTitle.textContent = "Earth"  
+                // Venus al tamaño base, los demás planetas más pequeños
+                animatePlanet(neptune, new THREE.Vector3(-9, 0, 0), 1); 
+                animatePlanet(mercury, new THREE.Vector3(-4.5, 0, 0), 1); 
+
+                animatePlanet(venus, new THREE.Vector3(0, -1.8, 0), 3); 
+
+                animatePlanet(earth, new THREE.Vector3(4.5, 0, 0), 0.3); 
+                animatePlanet(atmosphere, new THREE.Vector3(4.5, 0, 0), 0.3); 
+                animatePlanet(clouds, new THREE.Vector3(4.5, 0, 0), 0.3); 
+                animatePlanet(moon, new THREE.Vector3(4.5, 0, 0), 0.3); 
+
+                animatePlanet(mars, new THREE.Vector3(9, 0, 0), 1);  
+                break;
             case 'earth':
                 leftPlanetTitle.textContent = "Venus"
                 title.innerHTML = "PLANET <br> EARTH"
@@ -229,28 +363,13 @@ function onMouseClick(event) {
                 animatePlanet(mercury, new THREE.Vector3(-9, 0, 0), 1);  
                 animatePlanet(venus, new THREE.Vector3(-4.5, 0, 0), 1);  
 
+                animatePlanet(moon, new THREE.Vector3(0, -1, 0), 1); 
                 animatePlanet(earth, new THREE.Vector3(0, -1.8, 0), 1);  
                 animatePlanet(atmosphere, new THREE.Vector3(0, -1.8, 0), 1); 
                 animatePlanet(clouds, new THREE.Vector3(0, -1.8, 0), 1); 
 
                 animatePlanet(mars, new THREE.Vector3(4.5, 0, 0), 1);  
                 animatePlanet(jupiter, new THREE.Vector3(9, 0, 0), 1); 
-                break;
-            case 'venus':
-                // Add mercury to the scene
-                leftPlanetTitle.textContent = "Mercury"
-                title.innerHTML = "PLANET <br> VENUS"
-                rightPlanetTitle.textContent = "Earth"  
-                // Venus al tamaño base, los demás planetas más pequeños
-                animatePlanet(mercury, new THREE.Vector3(-4.5, 0, 0), 1); 
-
-                animatePlanet(venus, new THREE.Vector3(0, -1.8, 0), 3); 
-
-                animatePlanet(earth, new THREE.Vector3(4.5, 0, 0), 0.3); 
-                animatePlanet(atmosphere, new THREE.Vector3(4.5, 0, 0), 0.3); 
-                animatePlanet(clouds, new THREE.Vector3(4.5, 0, 0), 0.3); 
-
-                animatePlanet(mars, new THREE.Vector3(9, 0, 0), 1);  
                 break;
             case 'mars':
                 leftPlanetTitle.textContent = "Earth"
@@ -262,10 +381,14 @@ function onMouseClick(event) {
                 animatePlanet(earth, new THREE.Vector3(-4.5, 0, 0), 0.3);  
                 animatePlanet(atmosphere, new THREE.Vector3(-4.5, 0, 0), 0.3); 
                 animatePlanet(clouds, new THREE.Vector3(-4.5, 0, 0), 0.3); 
+                animatePlanet(moon, new THREE.Vector3(-4.5, 0, 0), 0.3); 
 
                 animatePlanet(mars, new THREE.Vector3(0, -1.8, 0), 2.5); 
                 
                 animatePlanet(jupiter, new THREE.Vector3(4.5, 0, 0), 1); 
+
+                animatePlanet(saturn, new THREE.Vector3(9, 0, 0), 1); 
+                animatePlanet(saturnRings, new THREE.Vector3(9, 0, 0), 1); 
                 break;
             case 'jupiter':
                 leftPlanetTitle.textContent = "Mars"
@@ -275,10 +398,66 @@ function onMouseClick(event) {
                 animatePlanet(earth, new THREE.Vector3(-9, 0, 0), 0.3);  
                 animatePlanet(atmosphere, new THREE.Vector3(-9, 0, 0), 0.3); 
                 animatePlanet(clouds, new THREE.Vector3(-9, 0, 0), 0.3); 
+                animatePlanet(moon, new THREE.Vector3(-9, 0, 0), 0.3); 
 
                 animatePlanet(mars, new THREE.Vector3(-4.5, 0, 0), 1); 
                 
                 animatePlanet(jupiter, new THREE.Vector3(0, -1.8, 0), 4.5); 
+                
+                animatePlanet(saturn, new THREE.Vector3(4.5, 0, 0), 1);
+                animatePlanet(saturnRings, new THREE.Vector3(4.5, 0, 0), 1); 
+
+                animatePlanet(uranus, new THREE.Vector3(9, 0, 0), 1); 
+                break;
+            case 'saturn':
+                leftPlanetTitle.textContent = " ..         Jupiter"
+                title.innerHTML = "PLANET <br> SATURN"
+                rightPlanetTitle.textContent = "Uranus"  
+                // Marte al tamaño base, los demás planetas más pequeños
+                animatePlanet(mars, new THREE.Vector3(-9, 0, 0), 1);
+                
+                animatePlanet(jupiter, new THREE.Vector3(-4.5, 0, 0), 1);
+                
+                animatePlanet(saturn, new THREE.Vector3(0, -1.8, 0), 4.2);
+                animatePlanet(saturnRings, new THREE.Vector3(0, -1.8, 0), 4.5); 
+                
+                animatePlanet(uranus, new THREE.Vector3(4.5, 0, 0), 1);
+
+                animatePlanet(neptune, new THREE.Vector3(9, 0, 0), 1);
+
+                break;
+            case 'uranus':
+                leftPlanetTitle.textContent = ".Saturn"
+                title.innerHTML = "PLANET <br> URANUS"
+                rightPlanetTitle.textContent = "Neptune"  
+                // Marte al tamaño base, los demás planetas más pequeños
+                animatePlanet(jupiter, new THREE.Vector3(-9, 0, 0), 1); 
+                
+                animatePlanet(saturn, new THREE.Vector3(-4.5, 0, 0), 1); 
+                animatePlanet(saturnRings, new THREE.Vector3(-4.5, 0, 0), 1); 
+                
+                animatePlanet(uranus, new THREE.Vector3(0, -1.8, 0), 3.9); 
+                
+                animatePlanet(neptune, new THREE.Vector3(4.5, 0, 0), 1);
+
+                animatePlanet(mercury, new THREE.Vector3(9, 0, 0), 1);
+
+                break;
+            case 'neptune':
+                leftPlanetTitle.textContent = "Uranus"
+                title.innerHTML = "PLANET <br> NEPTUNE"
+                rightPlanetTitle.textContent = "Mercury"  
+                // Marte al tamaño base, los demás planetas más pequeños
+                animatePlanet(saturn, new THREE.Vector3(-9, 0, 0), 1); 
+                animatePlanet(saturnRings, new THREE.Vector3(-9, 0, 0), 1); 
+                
+                animatePlanet(uranus, new THREE.Vector3(-4.5, 0, 0), 1); 
+                
+                animatePlanet(neptune, new THREE.Vector3(0, -1.8, 0), 3.9); 
+                
+                animatePlanet(mercury, new THREE.Vector3(4.5, 0, 0), 1);
+                animatePlanet(venus, new THREE.Vector3(9, 0, 0), 1);
+
                 break;
     }
     } else {
@@ -303,6 +482,7 @@ function animatePlanet(planet, newPosition, targetScale) {
         // Interpolamos posición y escala
         planet.position.lerpVectors(startPosition, targetPosition, t);
         planet.scale.lerpVectors(startScale, targetScaleVector, t);
+        
 
         if (t < 1) {
             requestAnimationFrame(updatePlanetPosition);
