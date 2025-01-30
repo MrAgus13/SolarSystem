@@ -5,6 +5,7 @@
 }
 
 
+
 /*   */
 .planetTitle{
     font-weight: 400;
@@ -31,4 +32,98 @@
 .planetContainer .centerImage{
     width: 1050px;
     height: 400px;
+}
+
+#backButton{
+    z-index: 10;
+    position: relative;
+}
+
+#planetInfo{
+    width: 40%;
+    padding: 2em;
+    margin-right: 1%;
+    float: right;
+    color: black;
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 10px;
+}
+
+.infoDetailedBox{
+    display: flex;
+    height: 75vh;
+    justify-content: flex-end;
+    align-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+
+}
+
+#lateralBar {
+    width: 250px;
+    z-index: 10;
+    position: relative;
+    background-color: none;
+    color: white;
+    float: right;
+    padding: 0;
+    height: auto;  /* Ajusta la altura según el contenido */
+    box-sizing: border-box;
+    border-left: 1px solid white;
+    display: flex;
+    flex-direction: column;  /* Alinea los elementos en columna */
+}
+
+#lateralBar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;  /* Los elementos de la lista se alinean verticalmente */
+}
+
+#lateralBar ul li {
+    margin: 20px 0;
+    padding: 10px;
+    position: relative;
+}
+
+#lateralBar ul li.active {
+    border: 1px solid white;  /* Borde visible para el li activo */
+}
+
+#lateralBar ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+#lateralBar ul li.active::after {
+    content: ''; 
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-left: 2px solid white;  /* Borde que cubre toda la altura del li activo */
+    pointer-events: none;  /* Asegura que el pseudo-elemento no interfiera con clics */
+}
+
+/* Ajustes adicionales para el primer y último 'li' */
+#lateralBar ul li:first-child {
+    margin-top: 0;
+}
+
+#lateralBar ul li:last-child {
+    margin-bottom: 0;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+#planetInfo.visible {
+    transition: opacity 0.5s ease, visibility 0s 0s; /* Fade in with transition */
 }
