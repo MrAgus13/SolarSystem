@@ -10,8 +10,142 @@ container.appendChild(renderer.domElement);
 
 document.getElementById('backButton').addEventListener('click', restoreState);
 
+
+
 // Obtener todos los enlaces dentro del lateralBar
 const menuItems = document.querySelectorAll('#lateralBar ul li a');
+
+const troposferaGeometry = new THREE.SphereGeometry(1.5, 32, 32);
+const troposferaMaterial = new THREE.MeshBasicMaterial({
+    color: 0x00bfff, // Azul para la troposfera
+    transparent: true,
+    opacity: 0.5
+});
+const troposfera = new THREE.Mesh(troposferaGeometry, troposferaMaterial);
+
+const estratosferaGeometry = new THREE.SphereGeometry(1.7, 32, 32);
+const estratosferaMaterial = new THREE.MeshBasicMaterial({
+    color: 0xff6347, // Naranja para la estratosfera
+    transparent: true,
+    opacity: 0.5
+});
+const estratosfera = new THREE.Mesh(estratosferaGeometry, estratosferaMaterial);
+
+const mesosferaGeometry = new THREE.SphereGeometry(2, 32, 32);
+const mesosferaMaterial = new THREE.MeshBasicMaterial({
+    color: 0xff4500, // Rojo para la mesosfera
+    transparent: true,
+    opacity: 0.5
+});
+const mesosfera = new THREE.Mesh(mesosferaGeometry, mesosferaMaterial);
+
+const termosferaGeometry = new THREE.SphereGeometry(2.6, 32, 32);
+const termosferaMaterial = new THREE.MeshBasicMaterial({
+    color: 0x8b0000, // Rojo oscuro para la termosfera
+    transparent: true,
+    opacity: 0.5
+});
+const termosfera = new THREE.Mesh(termosferaGeometry, termosferaMaterial);
+
+const exosferaGeometry = new THREE.SphereGeometry(3.9, 32, 32);
+const exosferaMaterial = new THREE.MeshBasicMaterial({
+    color: 0x00008b, // Azul oscuro para la exósfera
+    transparent: true,
+    opacity: 0.5
+});
+const exosfera = new THREE.Mesh(exosferaGeometry, exosferaMaterial);
+
+// Declaramos layerLabels como variable global para acceder en ambas funciones
+const layerLabels = [];
+const layerObjects = [troposfera, estratosfera, mesosfera, termosfera, exosfera]; // Lista de capas
+
+function removeAtmosphere() {
+    // Ocultar las capas en lugar de eliminarlas para evitar perder sus referencias
+    layerObjects.forEach(layer => {
+        layer.visible = false;  // Simplemente ocultamos las capas en vez de removerlas
+    });
+
+    // Ocultar y eliminar las etiquetas HTML
+    layerLabels.forEach(({ element }) => {
+        element.remove(); // Elimina la etiqueta del DOM
+    });
+
+    layerLabels.length = 0; // Vaciar el array de etiquetas
+}
+
+function addAtmosphere() {
+    // Volver a mostrar las capas en la escena
+    removeAtmosphere();
+
+    layerObjects.forEach(layer => {
+        layer.visible = true;  // Hacemos visibles nuevamente las capas
+        scene.add(layer);
+    });
+    // Limpiar cualquier etiqueta residual antes de agregar nuevas
+
+    // Lista de nombres de las capas
+    const layerNames = ['Troposfera', 'Estratosfera', 'Mesósfera', 'Termósfera', 'Exósfera'];
+
+    // Crear etiquetas para cada capa
+    layerObjects.forEach((layer, index) => {
+        const label = document.createElement('div');
+        label.className = 'label';
+        label.textContent = layerNames[index];
+
+        // **Estilización para visibilidad**
+        label.style.position = 'absolute';
+        label.style.color = 'white';
+        label.style.background = 'none';
+        label.style.padding = '5px 10px';
+        label.style.borderRadius = '8px';
+        label.style.fontSize = '14px';
+        label.style.fontFamily = 'Arial, sans-serif';
+        label.style.textAlign = 'center';
+        label.style.pointerEvents = 'none'; // Evita interferencias con clics
+        label.style.transform = 'translate(-50%, 50%)';
+        label.style.zIndex = '10';
+
+        document.body.appendChild(label);
+        layerLabels.push({ element: label, object: layer });
+    });
+
+    // **Actualizar la posición de las etiquetas en la pantalla**
+    function updateLabels() {
+        const vector = new THREE.Vector3();
+        layerLabels.forEach(({ element, object }) => {
+            vector.copy(object.position);
+
+            // **Colocar el texto en el borde superior de la esfera**
+            const sphereRadius = object.geometry.parameters.radius;
+            vector.y += sphereRadius + 0.05;  // Ajuste para evitar superposición
+
+            vector.project(camera);
+
+            const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
+            const y = -(vector.y * 0.5 - 0.5) * window.innerHeight;
+
+            element.style.left = `${x}px`;
+            element.style.top = `${y}px`;
+        });
+    }
+
+    // **Animación de la escena**
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+        updateLabels();  // Mantener los textos actualizados
+    }
+
+    animate();
+
+    // **Posicionar las capas progresivamente en el eje Y**
+    animatePlanet(troposfera, new THREE.Vector3(0, -2, 0), 1);
+    animatePlanet(estratosfera, new THREE.Vector3(0, -2, 0), 1);
+    animatePlanet(mesosfera, new THREE.Vector3(0, -2, 0), 1);
+    animatePlanet(termosfera, new THREE.Vector3(0, -2, 0), 1);
+    animatePlanet(exosfera, new THREE.Vector3(0, -2, 0), 1);
+}
+
 
 // Iterar sobre los enlaces y agregar un evento 'click' a cada uno
 menuItems.forEach(item => {
@@ -34,6 +168,7 @@ menuItems.forEach(item => {
             targetSection.style.display = 'block';
         } 
         if (targetId === 'planetInfo') {
+            removeAtmosphere();
             document.getElementById('planetInfo').style.display = 'none';
             animatePlanet(moon, new THREE.Vector3(0, 0, 0), 1); 
             animatePlanet(earth, new THREE.Vector3(0, 0, 0), 1);  
@@ -41,6 +176,7 @@ menuItems.forEach(item => {
             animatePlanet(clouds, new THREE.Vector3(0, 0, 0), 1);  
         }
         else if (targetId === 'info') {
+            removeAtmosphere();
             // Mostrar el div "planetInfo"
             document.getElementById('planetInfo').style.display = 'block';
             animatePlanet(moon, new THREE.Vector3(-2, 0.8, 0), 1);
@@ -50,6 +186,9 @@ menuItems.forEach(item => {
             
         } 
         else if (targetId === 'atmosphere'){
+            // Crear una capa para las diferentes capas de la atmósfera
+            addAtmosphere();
+            
             // Ocultar el div "planetInfo" si no se está en la sección "INFO"
             document.getElementById('planetInfo').style.display = 'none';
             animatePlanet(moon, new THREE.Vector3(0, -10, 0), 1); 
@@ -59,6 +198,7 @@ menuItems.forEach(item => {
             
         }
         else if (targetId === 'moons'){
+            removeAtmosphere();
             // Ocultar el div "planetInfo" si no se está en la sección "INFO"
             document.getElementById('planetInfo').style.display = 'none';
             animatePlanet(moon, new THREE.Vector3(0, 0, 0), 5); 
@@ -83,63 +223,6 @@ scene.add(specificLight);
 
 // Cargar las texturas
 const textureLoader = new THREE.TextureLoader();
-
-// Crear un sistema de partículas para las estrellas
-const numStars = 4000;  // Número de estrellas a crear
-
-// Geometría de las estrellas (esferas pequeñas)
-const starGeometry = new THREE.SphereGeometry(0.05, 8, 8);  // Tamaño pequeño de las estrellas
-
-// Material de las estrellas (brillantes)
-const starMaterial = new THREE.MeshBasicMaterial({
-    color: 0xFFFFFF,  // Color blanco para las estrellas
-    emissive: 0xFFFFFF,  // Color de emisión para simular el brillo
-    emissiveIntensity: 1,  // Intensidad de la emisión para que brillen
-    transparent: true,  // Hacer las estrellas transparentes para poder modificar la opacidad
-    opacity: 1  // Empieza con opacidad completa
-});
-
-// Crear las estrellas y agregarlas a la escena
-const stars = [];
-for (let i = 0; i < numStars; i++) {
-    const star = new THREE.Mesh(starGeometry, starMaterial);
-
-    // Colocar cada estrella en una posición aleatoria en el espacio
-    star.position.set(
-        (Math.random() - 0.5) * 100,  // Posición X aleatoria entre -500 y 500
-        (Math.random() - 0.5) * 100,  // Posición Y aleatoria entre -500 y 500
-        (Math.random() - 0.5) * 400   // Posición Z aleatoria entre -500 y 500
-    );
-
-    // Añadir la estrella a la escena y al array de estrellas
-    scene.add(star);
-    stars.push(star);
-}
-
-// Variables para controlar el parpadeo
-const blinkSpeed = 2;  // Velocidad de parpadeo (más bajo es más lento)
-const blinkDuration = 5000;  // Duración total para parpadear de apagado a encendido (en ms)
-
-// Función para animar el parpadeo suave de las estrellas
-function animateStars() {
-    stars.forEach((star) => {
-        // Crear un parpadeo suave usando una interpolación en el tiempo
-        const time = Date.now() * 0.002; // Tiempo en función de la velocidad de parpadeo
-        const opacity = Math.sin(time * blinkSpeed) * 0.5 + 0.5; // Cambia la opacidad de 0 a 1 de forma suave
-
-        // Asignar la opacidad calculada
-        star.material.opacity = opacity;
-    });
-
-    // Llamar a la función de animación en el siguiente frame
-    requestAnimationFrame(animateStars);
-    renderer.render(scene, camera);
-}
-
-// Iniciar la animación de parpadeo
-animateStars();
-
-
 
 // Crear el modelo de la Tierra
 const earthGeometry = new THREE.SphereGeometry(1.4, 32, 32);

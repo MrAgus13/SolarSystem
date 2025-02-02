@@ -13,68 +13,6 @@ const light = new THREE.PointLight(0xffffff, 1, 100);
 light.position.set(10, 10, 10);
 scene.add(light);
 
-// Cargar las texturas
-
-// Crear un sistema de partículas para las estrellas
-const numStars = 4000;  // Número de estrellas a crear
-
-// Geometría de las estrellas (esferas pequeñas)
-const starGeometry = new THREE.SphereGeometry(0.05, 8, 8);  // Tamaño pequeño de las estrellas
-
-// Material de las estrellas (brillantes)
-const starMaterial = new THREE.MeshBasicMaterial({
-    color: 0xFFFFFF,  // Color blanco para las estrellas
-    emissive: 0xFFFFFF,  // Color de emisión para simular el brillo
-    emissiveIntensity: 1,  // Intensidad de la emisión para que brillen
-    transparent: true,  // Hacer las estrellas transparentes para poder modificar la opacidad
-    opacity: 1  // Empieza con opacidad completa
-});
-
-// Crear las estrellas y agregarlas a la escena
-const stars = [];
-for (let i = 0; i < numStars; i++) {
-    const star = new THREE.Mesh(starGeometry, starMaterial);
-
-    // Colocar cada estrella en una posición aleatoria en el espacio
-    star.position.set(
-        (Math.random() - 0.5) * 100,  // Posición X aleatoria entre -500 y 500
-        (Math.random() - 0.5) * 100,  // Posición Y aleatoria entre -500 y 500
-        (Math.random() - 0.5) * 400   // Posición Z aleatoria entre -500 y 500
-    );
-
-    // Añadir la estrella a la escena y al array de estrellas
-    scene.add(star);
-    stars.push(star);
-}
-
-// Variables para controlar el parpadeo
-
-// Asignar un intervalo de parpadeo diferente a cada estrella
-
-const blinkSpeed = 2;  // Velocidad de parpadeo (más bajo es más lento)
-const blinkDuration = 5000;  // Duración total para parpadear de apagado a encendido (en ms)
-
-// Función para animar el parpadeo suave de las estrellas
-function animateStars() {
-    stars.forEach((star) => {
-        // Crear un parpadeo suave usando una interpolación en el tiempo
-        const time = Date.now() * 0.002 // Tiempo en función de la velocidad de parpadeo
-        const opacity = Math.sin(time * blinkSpeed) * 0.5 + 0.5; // Cambia la opacidad de 0 a 1 de forma suave
-
-        // Asignar la opacidad calculada
-        star.material.opacity = opacity;
-    });
-    
-
-    // Llamar a la función de animación en el siguiente frame
-    requestAnimationFrame(animateStars);
-    renderer.render(scene, camera);
-}
-
-// Iniciar la animación de parpadeo
-animateStars();
-
-// Cargar texturas desde las URLs públicas del sitio web
 const textureLoader = new THREE.TextureLoader();
 const textures = {
     sun: textureLoader.load('../img/2k_sun.jpg'),

@@ -12,6 +12,7 @@ body {
     background-repeat: no-repeat;
     margin: 0;
     overflow: hidden;
+    height: 100dvh;
 }
 
 canvas {
