@@ -53,14 +53,3 @@ function updatePlanetsPositions(planet) {
     });
 }
 
-
-
-
-function name(params) {
-    
-}
-
-
-if (activePlanet == intersectedObject.name) {
-    
-}

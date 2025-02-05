@@ -481,7 +481,6 @@ function animate() {
     // La Luna orbita a una distancia de 2 unidades del centro de la Tierra, pero con el radio de la Tierra añadido
     const orbitRadius = earthRadius + 0.2;  
 
-    console.log(orbitRadius);
     
     // Calculamos la posición de la Luna en función del ángulo de la órbita
     moon.position.x = earthX + orbitRadius * Math.cos(angle);  
@@ -525,6 +524,7 @@ function saveState() {
 
 function restoreState(leftPlanet, actualPlanet, rightPlanet) {
     if (previousState) {
+        removeAtmosphere(); 
         animatePlanet(mercury, previousState.mercuryPos, 1);
         animatePlanet(venus, previousState.venusPos, 1);
         animatePlanet(mars, previousState.marsPos, 1);
@@ -669,9 +669,7 @@ function onMouseClick(event) {
     // Verificamos si se ha producido alguna intersección
     if (intersects.length > 0 && document.getElementById('infoDetailed').style.display == 'none') {
         const intersectedObject = intersects[0].object;
-        console.log("Clic en el planeta: ", intersectedObject.name);
-        console.log("Planeta activo: ", activePlanet);
-
+        
         // Lógica para mover y cambiar el tamaño de los planetas
         switch (intersectedObject.name) {
             
@@ -1060,8 +1058,8 @@ function convertToObject(planetName) {
     };
 
     const planet = planets[planetName.toLowerCase()];
-    console.log(planet);
-    
+
+
     if (!planet) {
         console.warn(`El planeta '${planetName}' no existe en la escena.`);
         return null;
@@ -1084,7 +1082,6 @@ function getPlanetScale(planetName) {
     };
 
     const scale = planetScales[planetName.toLowerCase()];
-    console.log(scale);
 
     if (!scale) {
         console.warn(`No se encontró escala para el planeta '${planetName}'.`);
