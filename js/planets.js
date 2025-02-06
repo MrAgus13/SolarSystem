@@ -10,6 +10,109 @@ let activePlanet;
 let rightPlanet = "Mars";
 let previousState = null;  // Almacenará el estado anterior
 
+//
+// JSON de datos de los planetas
+const planetsData = {
+    "mercury": {
+      "composition": {
+        "Oxygen": "42%",
+        "Sodium": "29%",
+        "Hydrogen": "22%",
+        "Helium": "6%"
+      },
+      "description": "Mercury is the smallest planet in the Solar System and the closest to the Sun. It has no atmosphere to retain heat, resulting in extreme temperature variations. The surface is heavily cratered, resembling Earth’s Moon. It completes one orbit around the Sun in just 88 Earth days. Mercury has a very weak magnetic field compared to Earth. Despite its proximity to the Sun, ice has been found in permanently shadowed craters. The planet’s core is large, making up about 60% of its total mass. Mercury’s surface is covered in long cliffs, evidence of planetary contraction. It rotates very slowly, completing one full rotation in 59 Earth days. The planet lacks weather systems due to its thin exosphere. Sunlight is seven times stronger on Mercury than on Earth. Spacecraft such as Mariner 10 and MESSENGER have provided detailed images. Mercury’s lack of an atmosphere makes it vulnerable to asteroid impacts. The planet's thin exosphere is mostly made of atoms blasted off its surface by solar winds."
+    },
+    "venus": {
+      "composition": {
+        "Carbon Dioxide": "96.5%",
+        "Nitrogen": "3.5%",
+        "Sulfur Dioxide": "0.015%",
+        "Other": "0.035%"
+      },
+      "description": "Venus is the hottest planet due to its thick atmosphere trapping heat. Its surface is covered by volcanic plains, with over 1,600 major volcanoes. A day on Venus is longer than its year, taking 243 Earth days to rotate once. The planet spins in the opposite direction of most planets, including Earth. Venus’ dense clouds make it the brightest object in the sky after the Sun and Moon. Its atmospheric pressure is 92 times that of Earth’s. Scientists believe Venus may have had oceans billions of years ago. The planet has massive, highland plateaus such as Ishtar Terra and Aphrodite Terra. Venus’ thick clouds create a runaway greenhouse effect, making it extremely hot. Wind speeds in Venus’ upper atmosphere reach 360 km/h. The planet's surface temperature remains stable, even at night. Venus’ sulfuric acid clouds reflect most of the sunlight that hits them. The Venera landers sent by the Soviet Union were the first to land on Venus. Because of its slow rotation, a day on Venus lasts longer than a year."
+    },
+    "earth": {
+      "composition": {
+        "Nitrogen": "78%",
+        "Oxygen": "21%",
+        "Argon": "1%",
+        "Other": "1%"
+      },
+      "description": "Earth is the only known planet to support life, with a rich atmosphere of oxygen and nitrogen. It has one natural satellite, the Moon, which stabilizes Earth's rotation. The planet’s magnetic field protects it from harmful solar and cosmic radiation. Earth’s surface is 71% covered by water, making it unique in the Solar System. It has a diverse climate, ranging from icy poles to tropical regions. The planet orbits the Sun at an average speed of 107,000 km/h. Earth’s atmosphere plays a key role in maintaining a stable climate. Earth has active plate tectonics that cause earthquakes and volcanic eruptions. The ozone layer protects the planet from harmful ultraviolet radiation. Earth’s biosphere has existed for over 3.5 billion years. Human civilization has drastically altered Earth's environment. The planet has experienced multiple mass extinctions in its history. The hydrological cycle moves water between the oceans, atmosphere, and land. Earth's axial tilt is responsible for the changing seasons."
+    },
+    "mars": {
+      "composition": {
+        "Carbon Dioxide": "95%",
+        "Nitrogen": "2.7%",
+        "Argon": "1.6%",
+        "Oxygen": "0.13%"
+      },
+      "description": "Mars is known as the Red Planet due to its iron-rich surface. It has the tallest volcano in the Solar System, Olympus Mons, which stands 22 km high. Mars’ thin atmosphere makes it a cold, dry desert with frequent dust storms. Scientists believe liquid water once existed on Mars, raising the possibility of past life. The planet has two small, irregularly shaped moons: Phobos and Deimos. Mars has seasons similar to Earth, but they last twice as long due to its longer orbit. Future missions aim to explore the possibility of human colonization on Mars. The Valles Marineris canyon system is over 4,000 km long, much larger than the Grand Canyon. Mars has signs of ancient river valleys, deltas, and lakebeds. Some Martian soil samples show traces of frozen water beneath the surface. Dust storms on Mars can cover the entire planet for weeks. Mars’ polar ice caps contain frozen carbon dioxide and water ice. The planet’s low atmospheric pressure makes liquid water unstable on the surface. NASA’s Perseverance rover is currently exploring Mars for signs of ancient life."
+    },
+    "jupiter": {
+      "composition": {
+        "Hydrogen": "89.8%",
+        "Helium": "10.2%",
+        "Methane": "0.3%",
+        "Other": "0.1%"
+      },
+      "description": "Jupiter is the largest planet in the Solar System, with a mass over 300 times Earth's. Its Great Red Spot is a massive storm that has raged for centuries. The planet has at least 79 known moons, including Ganymede, the largest in the Solar System. Jupiter’s intense gravity affects the orbits of nearby celestial bodies. Its powerful magnetic field is the strongest of any planet. Jupiter radiates more heat than it receives from the Sun. Its rapid rotation causes extreme weather patterns and massive cloud bands. The planet has a faint ring system mostly made of dust. Jupiter’s atmosphere is mostly hydrogen and helium, similar to the Sun. Strong jet streams create its distinctive colored cloud bands. Some of its moons may have subsurface oceans capable of supporting life. Jupiter played a key role in shaping the early Solar System. The Galileo probe provided the first detailed data about Jupiter’s atmosphere. The planet’s magnetosphere extends millions of kilometers into space."
+    },
+    "saturn": {
+      "composition": {
+        "Hydrogen": "96%",
+        "Helium": "3%",
+        "Methane": "0.3%",
+        "Other": "0.7%"
+      },
+      "description": "Saturn is famous for its bright rings, composed of countless ice and rock particles. It is the second-largest planet and has a fast rotation, completing a day in about 10.7 hours. Saturn has at least 83 moons, with Titan being the largest and having a thick atmosphere. Despite its size, Saturn is the least dense planet and could float in water. Its rings are constantly changing, with some parts appearing to disappear over time. The planet has powerful storms, including a hexagonal storm at its north pole. Saturn's atmosphere is mostly hydrogen and helium, similar to Jupiter’s. The Cassini mission provided the most detailed observations of Saturn. Enceladus, one of Saturn’s moons, has water jets that may indicate an underground ocean. The planet's strong winds can reach speeds of 1,800 km/h. Its rings span over 280,000 km but are only 10 meters thick. Saturn’s gravity is strong enough to slightly compress the planet’s shape. The planet emits more heat than it receives due to helium sinking in its atmosphere."
+    },
+    "uranus": {
+    "composition": {
+      "Hydrogen": "83%",
+      "Helium": "15%",
+      "Methane": "2%",
+      "Other": "0.1%"
+    },
+    "description": "Uranus rotates on its side, making it unique among the planets in the Solar System. It appears blue-green due to methane in its atmosphere absorbing red light. The planet has faint rings that were discovered in 1977. Uranus has extreme seasons, with each lasting around 42 Earth years. Its core is much colder compared to Jupiter and Saturn, despite being an ice giant. Uranus’ winds can reach speeds of over 900 km/h. The planet has 27 known moons, with Miranda displaying dramatic cliffs and valleys. Uranus was the first planet discovered using a telescope in 1781. The planet’s rings are made of dark particles, making them hard to see. Uranus emits very little heat compared to other gas giants. It is the least dense of the giant planets, with a rocky core and icy mantle. Voyager 2 is the only spacecraft to have visited Uranus. The planet’s magnetic field is tilted at a different angle than its rotation. Uranus has an unusual orbit that makes it appear to roll around the Sun."
+  },
+  "neptune": {
+    "composition": {
+      "Hydrogen": "80%",
+      "Helium": "19%",
+      "Methane": "1%",
+      "Other": "0.1%"
+    },
+    "description": "Neptune is the farthest planet from the Sun and has the strongest winds in the Solar System. Its deep blue color comes from methane in its atmosphere. Neptune has a massive storm called the Great Dark Spot, similar to Jupiter’s Great Red Spot. The planet has 14 known moons, with Triton orbiting in the opposite direction of Neptune’s rotation. Neptune’s gravity is stronger than Earth’s despite being much farther from the Sun. It takes 165 Earth years to complete one orbit around the Sun. The planet was discovered in 1846 using mathematical predictions before being observed. Neptune’s atmosphere has layers of clouds and storms that can last for years. Its moon Triton is the coldest known object in the Solar System. Voyager 2 provided the only close-up images of Neptune. The planet radiates more heat than it receives from the Sun. Neptune’s winds can reach speeds of over 2,000 km/h, the fastest in the Solar System. Its rings are faint and consist mostly of dust and ice particles. Neptune’s interior is believed to contain water, ammonia, and methane ices."
+  }
+};
+
+// Función para actualizar la información del planeta
+function updatePlanetInfo(planetName) {
+    const planetInfo = planetsData[planetName.toLowerCase()];
+
+    if (!planetInfo) {
+        console.warn(`No se encontró información para el planeta '${planetName}'.`);
+        return;
+    }
+
+    // Actualizar la composición atmosférica
+    const compositionDivs = document.querySelectorAll("#planetInfo div .circle");
+    const compositionKeys = Object.keys(planetInfo.composition);
+    
+    compositionDivs.forEach((div, index) => {
+        if (compositionKeys[index]) {
+            div.querySelector("p").textContent = compositionKeys[index];
+            div.querySelector("span").textContent = planetInfo.composition[compositionKeys[index]];
+        }
+    });
+    console.log(planetInfo);
+    // Actualizar la descripción
+    document.querySelector("#planetInfo .infoTextPlanet").textContent = planetInfo.description;
+
+    // Mostrar el contenedor
+    document.getElementById("planetInfo").style.display = "block";
+}
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x000000, 0); // Fondo transparente
@@ -192,6 +295,7 @@ menuItems.forEach(item => {
              
         }
         else if (targetId === 'info') {
+            updatePlanetInfo(activePlanet);
             removeAtmosphere();
             // Mostrar el div "planetInfo"
             document.getElementById('planetInfo').style.display = 'block';
@@ -359,6 +463,28 @@ mars.position.set(4.5, 0, 0); // Marte en X = 4, Y = -1, Z = 0
 mars.name = "mars";  // Asignamos un nombre
 scene.add(mars);
 
+// Lunas de marte
+const fobosMaterial = new THREE.MeshStandardMaterial({
+    map: textureLoader.load('../img/phobos_texture.jpg'),
+    bumpMap: textureLoader.load('../img/phobos_texture.jpg'),
+    bumpScale: 0.03,
+});
+const fobos = new THREE.Mesh(new THREE.SphereGeometry(0.1, 32, 32), fobosMaterial);
+fobos.position.set(4.5, -1, 0);
+fobos.name = "fobos";
+scene.add(fobos);
+
+const deimosMaterial = new THREE.MeshStandardMaterial({
+    map: textureLoader.load('../img/deimos_texture.jpg'),
+    bumpMap: textureLoader.load('../img/deimos_texture.jpg'),
+    bumpScale: 0.03,
+});
+const deimos = new THREE.Mesh(new THREE.SphereGeometry(0.1, 32, 32), deimosMaterial);
+deimos.position.set(4.5, -1, 0);
+deimos.name = "deimos";
+scene.add(deimos);
+
+
 // Jupiter
 const jupiterMaterial = new THREE.MeshStandardMaterial({
     map: textureLoader.load('../img/2k_jupiter.jpg'),
@@ -369,6 +495,8 @@ const jupiter = new THREE.Mesh(new THREE.SphereGeometry(0.6, 32, 32), jupiterMat
 jupiter.position.set(9, 0, 0); // Marte en X = 4, Y = -1, Z = 0
 jupiter.name = "jupiter";  // Asignamos un nombre
 scene.add(jupiter);
+
+
 
 // Saturn
 const saturnMaterial = new THREE.MeshStandardMaterial({
@@ -447,6 +575,7 @@ scene.add(neptune);
 // Ajustar la posición de la cámara
 camera.position.z = 6;  // Cambiar la posición de la cámara según sea necesario
 let angle = 0; 
+let angle2 = 0; 
 
 //
 activePlanet = 'earth';
@@ -462,29 +591,50 @@ function animate() {
     atmosphere.rotation.y += 0.005; // Rotación de la atmósfera
     clouds.rotation.y += 0.0007;
     venus.rotation.y += 0.0015; // Rotación de Venus
-    mars.rotation.y += 0.002;  // Rotación de Marte
+    mars.rotation.y += 0.002; 
+    fobos.rotation.y += 0.002;
+    fobos.rotation.x += 0.002;
+    deimos.rotation.y += 0.0008;
+    deimos.rotation.x += 0.0008; // Rotación de Marte
     jupiter.rotation.y += 0.0005;
     saturn.rotation.y += 0.0005;
     particles.rotation.z += 0.00001;
     uranus.rotation.y += 0.0004;
     neptune.rotation.y += 0.0002;
 
-    angle += 0.005; // Controlar la velocidad de la órbita
+    angle += 0.005;
+    angle2 += 0.002; // Controlar la velocidad de la órbita
 
     // Hacer que la Luna orbite alrededor de la Tierra sin mover la Tierra
-    const earthX = earth.position.x;
-    const earthZ = earth.position.z;
+    let earthX = earth.position.x;
+    let earthZ = earth.position.z;
+    let marsX = mars.position.x;
+    let marsZ = mars.position.z;
     
     // El radio de la Tierra es obtenido de la geometría de la esfera
-    const earthRadius = earth.geometry.parameters.radius;
+    let earthRadius = earth.geometry.parameters.radius;
+    let marsRadius = mars.geometry.parameters.radius;
     
     // La Luna orbita a una distancia de 2 unidades del centro de la Tierra, pero con el radio de la Tierra añadido
-    const orbitRadius = earthRadius + 0.2;  
+    let earthOrbitRadius = earthRadius + 0.2;  
+    let marsOrbitRadius;
 
+    if (activePlanet == 'mars') {
+        marsOrbitRadius = marsRadius + 0.7; 
+    } else {
+        marsOrbitRadius = marsRadius + 0.4;
+    }
+      
     
     // Calculamos la posición de la Luna en función del ángulo de la órbita
-    moon.position.x = earthX + orbitRadius * Math.cos(angle);  
-    moon.position.z = earthZ + orbitRadius * Math.sin(angle);
+    moon.position.x = earthX + earthOrbitRadius * Math.cos(angle);  
+    moon.position.z = earthZ + earthOrbitRadius * Math.sin(angle);
+
+    // Phobos
+    fobos.position.x = marsX + marsOrbitRadius * Math.cos(angle);  
+    fobos.position.z = marsZ + marsOrbitRadius * Math.sin(angle);
+    deimos.position.x = marsX + marsOrbitRadius * Math.cos(angle2);  
+    deimos.position.z = marsZ + marsOrbitRadius * Math.sin(angle2);
 
     // Hacer que la Luna gire sobre su propio eje
 
@@ -508,6 +658,8 @@ function saveState() {
         venusPos: venus.position.clone(),
         earthPos: earth.position.clone(),
         marsPos: mars.position.clone(),
+        fobosPos: fobos.position.clone(),
+        deimosPos: deimos.position.clone(),
         jupiterPos: jupiter.position.clone(),
         moonPos: moon.position.clone(),
         atmospherePos: atmosphere.position.clone(),
@@ -528,6 +680,8 @@ function restoreState(leftPlanet, actualPlanet, rightPlanet) {
         animatePlanet(mercury, previousState.mercuryPos, 1);
         animatePlanet(venus, previousState.venusPos, 1);
         animatePlanet(mars, previousState.marsPos, 1);
+        animatePlanet(fobos, previousState.fobosPos, 1);
+        animatePlanet(deimos, previousState.deimosPos, 1);
         animatePlanet(jupiter, previousState.jupiterPos, 1);
         animatePlanet(saturn, previousState.saturnPos, 1);
         animatePlanet(particles, previousState.particlesPos, 1);
@@ -785,7 +939,9 @@ function onMouseClick(event) {
                     animatePlanet(atmosphere, new THREE.Vector3(0, -1.8, 0), 1); 
                     animatePlanet(clouds, new THREE.Vector3(0, -1.8, 0), 1);  
                 
-                    animatePlanet(mars, new THREE.Vector3(4.5, 0, 0), 1);  
+                    animatePlanet(mars, new THREE.Vector3(4.5, 0, 0), 1);
+                    animatePlanet(fobos, new THREE.Vector3(4.5, -1, 0), 1); 
+                    animatePlanet(deimos, new THREE.Vector3(4.5, 1, 0), 1);  
                     animatePlanet(jupiter, new THREE.Vector3(9, 0, 0), 1);
                 } 
                 break;
@@ -805,7 +961,9 @@ function onMouseClick(event) {
                     animatePlanet(clouds, new THREE.Vector3(-9, 0, 0), 0.3); 
                     animatePlanet(moon, new THREE.Vector3(-9, 0, 0), 0.3); 
 
-                    animatePlanet(mars, new THREE.Vector3(0, 0, 0), 2.5);   
+                    animatePlanet(mars, new THREE.Vector3(0, 0, 0), 2.5);
+                    animatePlanet(fobos, new THREE.Vector3(0, 0.5, 0), 2); 
+                    animatePlanet(deimos, new THREE.Vector3(0, 0, 0), 2);    
 
                     animatePlanet(jupiter, new THREE.Vector3(9, 0, 0), 1); 
                     animatePlanet(saturn, new THREE.Vector3(9, 0, 0), 1); 
@@ -826,7 +984,9 @@ function onMouseClick(event) {
                     animatePlanet(clouds, new THREE.Vector3(-4.5, 0, 0), 0.3); 
                     animatePlanet(moon, new THREE.Vector3(-4.5, 0, 0), 0.3); 
 
-                    animatePlanet(mars, new THREE.Vector3(0, -1.8, 0), 2.5); 
+                    animatePlanet(mars, new THREE.Vector3(0, -1.8, 0), 2.5);
+                    animatePlanet(fobos, new THREE.Vector3(0, -1.8, 1), 1.8); 
+                    animatePlanet(deimos, new THREE.Vector3(0, -1.4, 0), 1.5);  
                     
                     animatePlanet(jupiter, new THREE.Vector3(4.5, 0, 0), 1); 
 
@@ -852,7 +1012,7 @@ function onMouseClick(event) {
 
                     animatePlanet(mars, new THREE.Vector3(-9, 0, 0), 1); 
                     
-                    animatePlanet(jupiter, new THREE.Vector3(0, 0, 0), 4.5); 
+                    animatePlanet(jupiter, new THREE.Vector3(0, 0, 0), 3); 
                     
                     animatePlanet(saturn, new THREE.Vector3(9, 0, 0), 1);
                     animatePlanet(particles, new THREE.Vector3(9, 0, 0), 1); 
@@ -897,8 +1057,8 @@ function onMouseClick(event) {
                     
                     animatePlanet(jupiter, new THREE.Vector3(-9, 0, 0), 1);
                     
-                    animatePlanet(saturn, new THREE.Vector3(0, 0, 0), 4.2);
-                    animatePlanet(particles, new THREE.Vector3(0, 0, 0), 4.5); 
+                    animatePlanet(saturn, new THREE.Vector3(0, 0, 0), 3);
+                    animatePlanet(particles, new THREE.Vector3(0, 0, 0), 3.3); 
                     
                     animatePlanet(uranus, new THREE.Vector3(9, 0, 0), 1);
 
@@ -939,7 +1099,7 @@ function onMouseClick(event) {
                     animatePlanet(saturn, new THREE.Vector3(-9, 0, 0), 1); 
                     animatePlanet(particles, new THREE.Vector3(-9, 0, 0), 1); 
                     
-                    animatePlanet(uranus, new THREE.Vector3(0, 0, 0), 3.9); 
+                    animatePlanet(uranus, new THREE.Vector3(0, 0, 0), 3); 
                     
                     animatePlanet(neptune, new THREE.Vector3(9, 0, 0), 1);
 
@@ -981,7 +1141,7 @@ function onMouseClick(event) {
                     
                     animatePlanet(uranus, new THREE.Vector3(-9, 0, 0), 1); 
                     
-                    animatePlanet(neptune, new THREE.Vector3(0, 0, 0), 3.9); 
+                    animatePlanet(neptune, new THREE.Vector3(0, 0, 0), 3); 
                     
                     animatePlanet(mercury, new THREE.Vector3(9, 0, 0), 1);
                     animatePlanet(venus, new THREE.Vector3(9, 0, 0), 1);
