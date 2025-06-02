@@ -1,24 +1,23 @@
-SolarSystem
-SolarSystem es una aplicación web interactiva que representa el sistema solar, permitiendo a los usuarios explorar los planetas y obtener información detallada sobre cada uno de ellos.
 
-🚀 Características
-Visualización interactiva de los planetas del sistema solar.
+# 🌌 SolarSystem
 
-Información detallada sobre cada planeta.
+**SolarSystem** es una aplicación web interactiva que representa el sistema solar, permitiendo a los usuarios explorar los planetas y obtener información detallada sobre cada uno de ellos.
 
-Diseño responsivo y atractivo.
+## 🚀 Características
 
-🛠️ Tecnologías utilizadas
-HTML5: Estructura de las páginas web.
+* Visualización interactiva de los planetas del sistema solar.
+* Información detallada sobre cada planeta.
+* Diseño responsivo y atractivo.
 
-CSS3: Estilos y diseño responsivo.
+## 🛠️ Tecnologías utilizadas
 
-JavaScript: Lógica de la aplicación y funcionalidades interactivas.
+* **HTML5**: Estructura de las páginas web.
+* **CSS3**: Estilos y diseño responsivo.
+* **JavaScript**: Lógica de la aplicación y funcionalidades interactivas.
 
-📂 Estructura del proyecto
-bash
-Copiar
-Editar
+## 📂 Estructura del proyecto
+
+```
 SolarSystem/
 ├── assets/          # Recursos como fuentes y otros archivos
 ├── css/             # Hojas de estilo CSS
@@ -26,13 +25,16 @@ SolarSystem/
 ├── js/              # Archivos JavaScript
 ├── index.html       # Página principal
 └── planetList.html  # Página con la lista de planetas
-💻 Instalación y uso
-Clonar el repositorio:
+```
 
-bash
-Copiar
-Editar
-git clone https://github.com/MrAgus13/SolarSystem.git
-Abrir la aplicación:
+## 💻 Instalación y uso
 
-Navega al directorio del proyecto y abre index.html en tu navegador web preferido.
+1. **Clonar el repositorio:**
+
+   ```bash
+   git clone https://github.com/MrAgus13/SolarSystem.git
+   ```
+
+2. **Abrir la aplicación:**
+
+   Navega al directorio del proyecto y abre `index.html` en tu navegador web preferido.
